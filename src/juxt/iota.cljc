@@ -45,6 +45,7 @@
   [then else]
   (if (cljs-env? &env) then else))
 
+;; TODO change name to avoid error when refer :all-ing both clojure.test and iota
 (defmacro is [& args]
   `(if-cljs
      (cljs.test/is ~@args)
