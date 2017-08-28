@@ -7,15 +7,13 @@ Infix Operators for Test Assertions
 When you are writing tests, it's common to want to check a number of properties against a given value.
 
 ```clojure
-(require '[clojure.test :refer :all]
-         '[schema.core :as s])
+(require '[clojure.test :refer :all])
 
 (deftest my-test
   (let [response ...]
     (is (= (:status response) 200))
     (is (= (count (get-in response [:headers "content-length"])) (count "Hello World!")))
     (is (= (count (get-in response [:headers "content-type"])) "text/plain;charset=utf-8"))
-    (is (nil? (s/check s/Str (get-in response [:headers "content-type"]))))
     (is (instance? java.nio.ByteBuffer response))
     ))
 ```
@@ -26,7 +24,6 @@ __iota__ is a micro-library that provides a single macro, `juxt.iota/given`, tha
 
 ```clojure
 (require '[clojure.test :refer :all]
-         '[schema.core :as s]
          '[juxt.iota :refer [given]])
 
 (deftest my-test
@@ -34,7 +31,6 @@ __iota__ is a micro-library that provides a single macro, `juxt.iota/given`, tha
           :status := 200
           :headers :⊃ {"content-length" (count "Hello World!")
                        "content-type" "text/plain;charset=utf-8"}
-          [:headers "content-type"] :- s/Str
           :body :instanceof java.nio.ByteBuffer))
 ```
 
@@ -46,8 +42,6 @@ Operator       | Meaning
 ---------------|-------------------
 `:=`           | is equal to
 `:!=`          | isn't equal to
-`:-`           | conforms to schema
-`:!-`          | doesn't conform to schema
 `:?`           | satifies predicate
 `:!?`          | doesn't satisfy predicate
 `:#`           | matches regex
